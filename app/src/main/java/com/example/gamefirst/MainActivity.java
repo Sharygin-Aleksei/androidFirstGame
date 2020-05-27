@@ -19,27 +19,30 @@ import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
-    float screenHeight;
-    float screenWidth;
-    float navigationBarHeight;
+    int screenHeight;
+    int screenWidth;
+    int navigationBarHeight;
 
     ConstraintLayout gameFieldLayout = null;
 
     ConstraintLayout barFieldLayout = null;
-    float gameFieldX;
-    float gameFieldY;
-    float gameFieldHeight;
-    float gameFieldWidth;
+    int gameFieldX;
+    int gameFieldY;
+    int gameFieldHeight;
+    int gameFieldWidth;
 
-    float barFieldHeight;
-    float barFieldWidth;
+    int barFieldHeight;
+    int barFieldWidth;
 
-    float holePictureSideSize;
+    final int MATRIX_SIZE = 18;
+    int holePictureSideSize;
 
     PlayField playField = null;
     Player player = null;
     TextView dig = null;
     TextView scoreCounter = null;
+
+    int mapId = 1;
 
 
     @Override
@@ -55,13 +58,13 @@ public class MainActivity extends AppCompatActivity {
         navigationBarHeight = Utils.getNavigationBarHeight(getResources());
 
         gameFieldLayout = findViewById(R.id.gameField);
-        gameFieldLayout.setBackgroundResource(R.drawable.grass_background);
+        Map.setMap(gameFieldLayout, 1);
+
         gameFieldX = gameFieldLayout.getLayoutParams().width;
         gameFieldY = gameFieldLayout.getLayoutParams().height;
 
         barFieldLayout = findViewById(R.id.barField);
-        barFieldLayout.getLayoutParams().width = (int) screenWidth;
-        barFieldLayout.getLayoutParams().height = (int) (screenHeight / 6);
+        barFieldLayout.getLayoutParams().width = screenWidth;
 
         barFieldHeight = barFieldLayout.getHeight();
         barFieldWidth = barFieldLayout.getWidth();
@@ -69,18 +72,13 @@ public class MainActivity extends AppCompatActivity {
         gameFieldHeight = screenHeight - barFieldHeight - navigationBarHeight;
         gameFieldWidth = screenWidth;
 
-        gameFieldLayout.getLayoutParams().height = (int) gameFieldHeight;
-        gameFieldLayout.setY(barFieldHeight);
-        gameFieldLayout.requestLayout();
-
+        gameFieldLayout.getLayoutParams().height = screenWidth;
 
         scoreCounter = findViewById(R.id.scoreCounter);
 
-        holePictureSideSize = gameFieldHeight / 15;
+        holePictureSideSize = gameFieldLayout.getLayoutParams().height / MATRIX_SIZE;
 
-
-
-        playField = new PlayField(10, 15);
+        playField = new PlayField(MATRIX_SIZE, MATRIX_SIZE, mapId);
         player = new Player();
 
         dig = findViewById(R.id.digCounter);
@@ -97,50 +95,55 @@ public class MainActivity extends AppCompatActivity {
 
                     if(xTouch <= playField.fieldSizeX * holePictureSideSize && yTouch <= playField.fieldSizeY * holePictureSideSize && player.dig > 0 ){
 
-                        int i = (int) Math.floor(xTouch / holePictureSideSize);
+                        int i= (int) Math.floor(xTouch / holePictureSideSize);
                         int j = (int) Math.floor(yTouch / holePictureSideSize);
 
-                        if(playField.field[i][j] == 0){
-                            player.score++;
-                            player.dig--;
-                            playField.dig(i,j);
+                        if(playField.field[j][i] == 0){
+                            playField.dig(j,i, player);
 
-                            ImageView hole = new ImageView(MainActivity.this);
-                            hole.setImageResource(R.drawable.holee);
-                            hole.setX((float) i * holePictureSideSize);
-                            hole.setY((float) j * holePictureSideSize);
-                            gameFieldLayout.addView(hole);
-                            hole.getLayoutParams().height = (int) holePictureSideSize;
-                            hole.getLayoutParams().width = (int) holePictureSideSize;
-
-                        }else if(playField.field[i][j] == 2){
-                            player.score += 2;
-                            playField.dig(i,j);
-                            ImageView hole = new ImageView(MainActivity.this);
-                            hole.setImageResource(R.drawable.holee);
-                            hole.setX((float) i * holePictureSideSize);
-                            hole.setY((float) j * holePictureSideSize);
-                            gameFieldLayout.addView(hole);
-                            hole.getLayoutParams().height = (int) holePictureSideSize;
-                            hole.getLayoutParams().width = (int) holePictureSideSize;
+                            new Hole(MainActivity.this, gameFieldLayout,
+                                    mapId, i, j, holePictureSideSize);
                         }
                     }
-                    scoreCounter.setText(String.valueOf(player.score));
-                    dig.setText(String.valueOf(player.dig));
+                    Utils.barCountersRefresh(dig, scoreCounter, player);
                 }
                 return true;
             }
         });
     }
     public void startNewGame(View v){
-        player.score = 0;
-        gameFieldLayout.removeAllViews();
-        playField = new PlayField(10, 15);
         player = new Player();
-        dig.setText(String.valueOf(player.dig));
-        scoreCounter.setText(String.valueOf(player.score));
+        gameFieldLayout.removeAllViews();
+        playField = new PlayField(MATRIX_SIZE, MATRIX_SIZE, mapId);
+        Utils.barCountersRefresh(dig, scoreCounter, player);
     }
 
+    public void firstMapSwitcher(View v){
+        mapId = 1;
+        Map.setMap(gameFieldLayout, mapId);
+        playField.setField(mapId);
+        player = new Player();
+        gameFieldLayout.removeAllViews();
+        Utils.barCountersRefresh(dig, scoreCounter, player);
+    }
+
+    public void secondMapSwitcher(View v){
+        mapId = 2;
+        Map.setMap(gameFieldLayout, mapId);
+        playField.setField(mapId);
+        player = new Player();
+        gameFieldLayout.removeAllViews();
+        Utils.barCountersRefresh(dig, scoreCounter, player);
+    }
+
+    public void thirdMapSwitcher(View v){
+        mapId = 3;
+        Map.setMap(gameFieldLayout, mapId);
+        playField.setField(mapId);
+        player = new Player();
+        gameFieldLayout.removeAllViews();
+        Utils.barCountersRefresh(dig, scoreCounter, player);
+    }
 
 }
 

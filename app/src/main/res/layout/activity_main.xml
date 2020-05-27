@@ -5,39 +5,46 @@
     android:id="@+id/fon"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/water"
     tools:context=".MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/gameField"
-        android:layout_width="419dp"
-        android:layout_height="636dp"
+        android:layout_width="421dp"
+        android:layout_height="567dp"
         android:background="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/barField"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent">
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/barField"
-        android:layout_width="410dp"
-        android:layout_height="91dp"
-        android:background="#FA0000"
+        android:layout_width="418dp"
+        android:layout_height="194dp"
+        android:background="@drawable/grass_free_texture"
         android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/gameField"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
 
         <Button
             android:id="@+id/newGameButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="4dp"
+            android:fontFamily="@font/aldrich"
             android:onClick="startNewGame"
             android:text="NEW GAME"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toStartOf="@+id/frame"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -45,35 +52,125 @@
             android:id="@+id/digCounter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginBottom="24dp"
-            android:text="dig"
+            android:layout_marginTop="8dp"
+            android:text="0"
             android:textColor="#FFFFFF"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/newGameButton" />
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="@+id/triesLabel"
+            app:layout_constraintStart_toStartOf="@+id/triesLabel"
+            app:layout_constraintTop_toBottomOf="@+id/triesLabel" />
 
         <TextView
             android:id="@+id/scoreLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="24dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="4dp"
             android:text="Score:"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/scoreCounter"
-            app:layout_constraintEnd_toEndOf="parent" />
+            android:textColor="#FFEEEE"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toStartOf="@+id/frame"
+            app:layout_constraintTop_toBottomOf="@+id/newGameButton" />
 
         <TextView
             android:id="@+id/scoreCounter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="40dp"
-            android:layout_marginBottom="30dp"
+            android:layout_marginTop="8dp"
             android:text="0"
-            android:textSize="20sp"
+            android:textColor="#FFEEEE"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="@+id/scoreLabel"
+            app:layout_constraintStart_toStartOf="@+id/scoreLabel"
+            app:layout_constraintTop_toBottomOf="@+id/scoreLabel" />
+
+        <TextView
+            android:id="@+id/triesLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="8dp"
+            android:text="Tries:"
+            android:textColor="#EAEAEA"
+            android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/newGameButton" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/frame"
+            android:layout_width="208dp"
+            android:layout_height="194dp"
+            android:background="@drawable/water"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="wrap_content"
+                android:background="#FFFFFF" />
+
+            <ImageView
+                android:id="@+id/mapSwitcherThirdMap"
+                android:layout_width="98dp"
+                android:layout_height="84dp"
+                android:layout_marginStart="4dp"
+                android:onClick="thirdMapSwitcher"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:srcCompat="@drawable/thirdmap" />
+
+            <ImageView
+                android:id="@+id/mapSwitcherFirstMap"
+                android:layout_width="93dp"
+                android:layout_height="81dp"
+                android:onClick="firstMapSwitcher"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/selectIslandText"
+                app:srcCompat="@drawable/firstmap" />
+
+            <ImageView
+                android:id="@+id/mapSwitcherSecondMap"
+                android:layout_width="102dp"
+                android:layout_height="82dp"
+                android:onClick="secondMapSwitcher"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/selectIslandText"
+                app:srcCompat="@drawable/secondmap" />
+
+            <TextView
+                android:id="@+id/selectIslandText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Select your island"
+                android:textColor="#E4FBFF"
+                android:textColorHint="#9E2020"
+                android:textSize="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="?"
+                android:textColor="#FAFFFFFF"
+                android:textSize="78dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/mapSwitcherThirdMap"
+                app:layout_constraintTop_toBottomOf="@+id/mapSwitcherFirstMap" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:background="#FFFFFF"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

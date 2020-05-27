@@ -1,6 +1,6 @@
 package com.example.gamefirst;
 
 public class Player {
-    int dig = 10;
+    int dig = 999;
     int score = 0;
 }
