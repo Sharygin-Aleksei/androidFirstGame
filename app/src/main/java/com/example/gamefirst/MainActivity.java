@@ -1,23 +1,52 @@
 package com.example.gamefirst;
 
 import androidx.annotation.Dimension;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.IntentSender;
+import android.content.pm.PackageManager;
+
+import android.location.Address;
+import android.location.Criteria;
+import android.location.Geocoder;
+import android.location.Location;
+
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.LocationListener;
+
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.view.Display;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.Arrays;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+
+import java.io.IOException;
+
 
 public class MainActivity extends AppCompatActivity {
+
+    private LocationManager locationManager;
+
+    LocationRequest locationRequest = null;
 
     int screenHeight;
     int screenWidth;
@@ -47,6 +76,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -84,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
         dig = findViewById(R.id.digCounter);
         dig.setText(String.valueOf(player.dig));
 
+
         gameFieldLayout.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -91,15 +123,15 @@ public class MainActivity extends AppCompatActivity {
                 float xTouch = event.getX();
                 float yTouch = event.getY();
 
-                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
 
-                    if(xTouch <= playField.fieldSizeX * holePictureSideSize && yTouch <= playField.fieldSizeY * holePictureSideSize && player.dig > 0 ){
+                    if (xTouch <= playField.fieldSizeX * holePictureSideSize && yTouch <= playField.fieldSizeY * holePictureSideSize && player.dig > 0) {
 
-                        int i= (int) Math.floor(xTouch / holePictureSideSize);
+                        int i = (int) Math.floor(xTouch / holePictureSideSize);
                         int j = (int) Math.floor(yTouch / holePictureSideSize);
 
-                        if(playField.field[j][i] == 0){
-                            playField.dig(j,i, player);
+                        if (playField.field[j][i] == 0) {
+                            playField.dig(j, i, player);
 
                             new Hole(MainActivity.this, gameFieldLayout,
                                     mapId, i, j, holePictureSideSize);
@@ -111,14 +143,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    public void startNewGame(View v){
+
+    public void startNewGame(View v) {
         player = new Player();
         gameFieldLayout.removeAllViews();
         playField = new PlayField(MATRIX_SIZE, MATRIX_SIZE, mapId);
         Utils.barCountersRefresh(dig, scoreCounter, player);
     }
 
-    public void firstMapSwitcher(View v){
+    public void firstMapSwitcher(View v) {
         mapId = 1;
         Map.setMap(gameFieldLayout, mapId);
         playField.setField(mapId);
@@ -127,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
         Utils.barCountersRefresh(dig, scoreCounter, player);
     }
 
-    public void secondMapSwitcher(View v){
+    public void secondMapSwitcher(View v) {
         mapId = 2;
         Map.setMap(gameFieldLayout, mapId);
         playField.setField(mapId);
@@ -136,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
         Utils.barCountersRefresh(dig, scoreCounter, player);
     }
 
-    public void thirdMapSwitcher(View v){
+    public void thirdMapSwitcher(View v) {
         mapId = 3;
         Map.setMap(gameFieldLayout, mapId);
         playField.setField(mapId);
@@ -144,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
         gameFieldLayout.removeAllViews();
         Utils.barCountersRefresh(dig, scoreCounter, player);
     }
+
 
 }
 
