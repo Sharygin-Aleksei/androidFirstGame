@@ -9,31 +9,45 @@ import android.widget.ImageView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-public class Hole {
+import java.util.List;
 
-    private static final int HOLE_FOR_FIRST_MAP = R.drawable.newhole;
-    private static final int HOLE_FOR_SECOND_MAP = R.drawable.secondhole;
-    private static final int HOLE_FOR_THIRD_MAP = R.drawable.thirdhole;
+public class Hole implements AnimatorInterface {
 
-    public Hole(Context context, ConstraintLayout layout, int mapId, int i, int j, int holePictureSideSize) {
-        ImageView hole = new ImageView(context);
-        hole.setImageResource(Hole.getHolePictureForMap(mapId));
-        hole.setX((float) i * holePictureSideSize);
-        hole.setY((float) j * holePictureSideSize);
-        layout.addView(hole);
-        hole.getLayoutParams().height =  holePictureSideSize;
-        hole.getLayoutParams().width =  holePictureSideSize;
+    public Bitmap holeBitmap;
+    public int x;
+    public int y;
+    public int coinTimer = 50;
+    public Coin coin = null;
+
+    public Hole(Context context, int mapId, int i, int j, int holePictureSideSize) {
+
+        this.x = i * holePictureSideSize;
+        this.y = j * holePictureSideSize;
+        coin = new Coin(context, x + holePictureSideSize/4, y - holePictureSideSize/2 , holePictureSideSize/2);
+
+        switch (mapId){
+            case 1:
+                holeBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.newhole);
+                holeBitmap = Bitmap.createScaledBitmap(holeBitmap, holePictureSideSize, holePictureSideSize, true);
+                break;
+            case 2:
+                holeBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.secondhole);
+                holeBitmap = Bitmap.createScaledBitmap(holeBitmap, holePictureSideSize, holePictureSideSize, true);
+                break;
+            case 3:
+                holeBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.thirdhole);
+                holeBitmap = Bitmap.createScaledBitmap(holeBitmap, holePictureSideSize, holePictureSideSize, true);
+                break;
+        }
     }
 
-    static int getHolePictureForMap(int mapId){
-        switch (mapId){
-            case 2:
-                return HOLE_FOR_SECOND_MAP;
-            case 3:
-                return HOLE_FOR_THIRD_MAP;
-            default:
-                return HOLE_FOR_FIRST_MAP;
-        }
+    @Override
+    public void draw(Canvas canvas) {
 
+    }
+
+    @Override
+    public List<AnimatorInterface> getAnimators() {
+        return null;
     }
 }
